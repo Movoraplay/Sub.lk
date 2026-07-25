@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubLK — Professional SRT Subtitle Library</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="#" class="brand-logo" id="nav-brand">
+                <i class="fa-solid fa-closed-captioning"></i> Sub<span>LK</span>
+            </a>
+            
+            <div class="nav-search-wrapper">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="nav-search-input" placeholder="Search subtitles...">
+            </div>
+
+            <div class="nav-actions">
+                <button class="btn btn-secondary" id="open-upload-btn">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Upload SRT
+                </button>
+                <button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= HERO SECTION ================= -->
+    <section class="hero-section" id="hero-section">
+        <div class="hero-content">
+            <h1>Find & Download High-Quality SRT Subtitles</h1>
+            <p>Community-driven subtitle repository for Movies, TV Series, Anime, and Documentaries.</p>
+            <div class="hero-search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="hero-search-input" placeholder="Enter movie or series title...">
+                <button class="btn btn-primary" id="hero-search-btn">Search</button>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-container">
+        <!-- ================= MAIN EXPLORE VIEW ================= -->
+        <div id="view-explore" class="page-view active">
+            <!-- Filter & Controls Toolbar -->
+            <div class="filter-toolbar">
+                <div class="filter-group">
+                    <div class="custom-select">
+                        <i class="fa-solid fa-filter"></i>
+                        <select id="category-filter">
+                            <option value="ALL">All Categories</option>
+                            <option value="Movie">Movie</option>
+                            <option value="Series">Series</option>
+                            <option value="Anime">Anime</option>
+                            <option value="Documentary">Documentary</option>
+                        </select>
+                    </div>
+                    <div class="custom-select">
+                        <i class="fa-solid fa-language"></i>
+                        <select id="language-filter">
+                            <option value="ALL">All Languages</option>
+                            <option value="English">English</option>
+                            <option value="Sinhala">Sinhala</option>
+                            <option value="Spanish">Spanish</option>
+                            <option value="French">French</option>
+                            <option value="Japanese">Japanese</option>
+                            <option value="German">German</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="view-stats">
+                    Showing <span id="showing-count">0</span> of <span id="total-count">0</span> Subtitles
+                </div>
+            </div>
+
+            <!-- Loading Skeleton Grid -->
+            <div id="skeleton-container" class="skeleton-grid">
+                <!-- Repeated Skeleton Cards -->
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+            </div>
+
+            <!-- Subtitles Table (Desktop View) -->
+            <div class="table-responsive-wrapper">
+                <table class="subtitle-table" id="subtitle-table">
+                    <thead>
+                        <tr>
+                            <th>Media</th>
+                            <th>Title & Details</th>
+                            <th>Category</th>
+                            <th>Language</th>
+                            <th>Size</th>
+                            <th>Downloads</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="subtitle-table-body">
+                        <!-- Dynamic Entries Handled by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Subtitles Grid (Mobile View) -->
+            <div class="subtitle-mobile-grid" id="subtitle-mobile-grid">
+                <!-- Dynamic Mobile Cards Handled by JS -->
+            </div>
+
+            <!-- Empty State Container -->
+            <div id="empty-state" class="empty-state hidden">
+                <i class="fa-solid fa-folder-open"></i>
+                <h3>No Subtitles Found</h3>
+                <p>We couldn't find any subtitle matches for your query. Try resetting filters or upload one yourself!</p>
+            </div>
+
+            <!-- Pagination Bar -->
+            <div class="pagination-bar" id="pagination-bar">
+                <button class="btn btn-outline" id="prev-page-btn" disabled>
+                    <i class="fa-solid fa-chevron-left"></i> Previous
+                </button>
+                <div class="page-numbers" id="page-numbers"></div>
+                <button class="btn btn-outline" id="next-page-btn">
+                    Next <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- ================= HOW TO USE GUIDE ================= -->
+            <section class="guide-section">
+                <h2><i class="fa-solid fa-circle-info"></i> How to Use SRT Subtitles</h2>
+                <div class="guide-grid">
+                    <div class="guide-card">
+                        <div class="guide-number">1</div>
+                        <h3>Download File</h3>
+                        <p>Locate your movie or series above and download the matching <code>.srt</code> file.</p>
+                    </div>
+                    <div class="guide-card">
+                        <div class="guide-number">2</div>
+                        <h3>Match Filename</h3>
+                        <p>Rename the <code>.srt</code> file so it has the exact same name as your video file in the same directory.</p>
+                    </div>
+                    <div class="guide-card">
+                        <div class="guide-number">3</div>
+                        <h3>Play Video</h3>
+                        <p>Open the video in media players like VLC or MPC-HC. Subtitles will automatically load!</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= DETAIL VIEW (view.html?id=X) ================= -->
+        <div id="view-details" class="page-view hidden">
+            <button class="btn btn-outline back-btn" id="back-to-explore-btn">
+                <i class="fa-solid fa-arrow-left"></i> Back to Subtitles
+            </button>
+            
+            <div class="details-hero" id="details-hero-container">
+                <!-- Dynamically populated detail structure -->
+            </div>
+        </div>
+
+        <!-- ================= UPLOAD PAGE VIEW (upload.html) ================= -->
+        <div id="view-upload" class="page-view hidden">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2><i class="fa-solid fa-cloud-arrow-up"></i> Upload Subtitle (.SRT)</h2>
+                    <p>Share your SRT file with the SubLK community</p>
+                </div>
+
+                <form id="upload-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="upload-title">Movie / Series Name *</label>
+                            <input type="text" id="upload-title" placeholder="e.g. Inception" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="upload-year">Release Year *</label>
+                            <input type="number" id="upload-year" min="1900" max="2099" placeholder="e.g. 2010" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="upload-category">Category *</label>
+                            <select id="upload-category" required>
+                                <option value="Movie">Movie</option>
+                                <option value="Series">Series</option>
+                                <option value="Anime">Anime</option>
+                                <option value="Documentary">Documentary</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="upload-language">Language *</label>
+                            <select id="upload-language" required>
+                                <option value="English">English</option>
+                                <option value="Sinhala">Sinhala</option>
+                                <option value="Spanish">Spanish</option>
+                                <option value="French">French</option>
+                                <option value="Japanese">Japanese</option>
+                                <option value="German">German</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="upload-poster">Poster URL (Optional)</label>
+                            <input type="url" id="upload-poster" placeholder="https://example.com/poster.jpg">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="upload-description">Description / Release Info</label>
+                            <textarea id="upload-description" rows="3" placeholder="e.g., Compatible with 1080p.WEBRip.x264 release..."></textarea>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>SRT Subtitle File *</label>
+                            <div class="file-drop-zone" id="file-drop-zone">
+                                <i class="fa-solid fa-file-code"></i>
+                                <p id="file-zone-text">Drag and drop your <strong>.srt</strong> file here or click to browse</p>
+                                <span class="file-spec">Strictly .srt formats allowed</span>
+                                <input type="file" id="upload-file" accept=".srt" required hidden>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" id="cancel-upload-btn">Cancel</button>
+                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Publish Subtitle</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- ================= PREVIEW MODAL ================= -->
+    <div class="modal-backdrop hidden" id="preview-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-file-lines"></i> Subtitle Preview (First 20 lines)</h3>
+                <button class="modal-close-btn" id="close-modal-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <pre class="srt-preview-box" id="srt-preview-box">Loading content...</pre>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="copy-preview-btn">
+                    <i class="fa-solid fa-copy"></i> Copy Text
+                </button>
+                <button class="btn btn-primary" id="download-from-modal-btn">
+                    <i class="fa-solid fa-download"></i> Download SRT
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3><i class="fa-solid fa-closed-captioning"></i> Sub<span>LK</span></h3>
+                <p>The largest community-driven subtitle indexing portal in Sri Lanka.</p>
+            </div>
+            <div class="footer-legal">
+                <p><i class="fa-solid fa-shield-halved"></i> <strong>Legal Disclaimer:</strong> SubLK is for subtitles only. We do not host any movies, video files, or copyrighted media. Upload only subtitles you have rights or permission to distribute.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 SubLK. All rights reserved. Built with pure JS/CSS.
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
